@@ -24,7 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class CatSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatDiary
-        fields = ['date', 'entry']
+        fields = ['date', 'entry', 'photo']
 
     def create(self, validated_data):
         user = self.context['request'].user

@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,6 +82,46 @@ REST_FRAMEWORK = {
 }
 
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+EMAIL_HOST = "smtp.gmail.com"  
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = "BookClubSystemEmail@gmail.com"  
+EMAIL_HOST_PASSWORD = "wxxjzuovtlilaucw "
+DEFAULT_FROM_EMAIL = "BookClubSystemEmail@gmail.com" 
+
+
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Celery Beat settings (for periodic tasks)
+CELERY_BEAT_SCHEDULE = {
+    'send-yearly-reminders': {
+        'task': 'diary.tasks.send_yearly_reminders',
+        'schedule': crontab(hour=0, minute=0),  # Every day at midnight
+    },
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'send-yearly-reminders': {
+        'task': 'diary.tasks.send_yearly_reminders',
+        'schedule': crontab(hour=0, minute=0),  # Every day at midnight
+    },
+}
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -131,3 +173,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Media files settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

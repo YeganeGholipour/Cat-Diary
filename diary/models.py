@@ -5,7 +5,7 @@ class CatDiary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     entry = models.TextField()
-    # photo = models.ImageField(upload_to='cat_photos/')
+    photo = models.ImageField(upload_to='cat_images/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.date}"

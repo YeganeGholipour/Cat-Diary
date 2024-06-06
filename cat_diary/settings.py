@@ -76,20 +76,20 @@ WSGI_APPLICATION = "cat_diary.wsgi.application"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
-EMAIL_HOST = "smtp.gmail.com"  
-EMAIL_PORT = 587  
-EMAIL_USE_TLS = True  
-EMAIL_HOST_USER = "BookClubSystemEmail@gmail.com"  
-EMAIL_HOST_PASSWORD = "wxxjzuovtlilaucw "
-DEFAULT_FROM_EMAIL = "BookClubSystemEmail@gmail.com" 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+# EMAIL_HOST = "smtp.gmail.com"  
+# EMAIL_PORT = 587  
+# EMAIL_USE_TLS = True  
+# EMAIL_HOST_USER = "BookClubSystemEmail@gmail.com"  
+# EMAIL_HOST_PASSWORD = "wxxjzuovtlilaucw "
+# DEFAULT_FROM_EMAIL = "BookClubSystemEmail@gmail.com" 
 
 
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'
@@ -99,27 +99,67 @@ DEFAULT_FROM_EMAIL = "BookClubSystemEmail@gmail.com"
 # CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TIMEZONE = 'UTC'
 
-CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_RESULT_BACKEND = 'rpc://'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
 
 # Celery Beat settings (for periodic tasks)
-CELERY_BEAT_SCHEDULE = {
-    'send-yearly-reminders': {
-        'task': 'diary.tasks.send_yearly_reminders',
-        'schedule': crontab(hour=0, minute=0),  # Every day at midnight
-    },
+# CELERY_BEAT_SCHEDULE = {
+#     'send-yearly-reminders': {
+#         'task': 'diary.tasks.send_yearly_reminders',
+#         'schedule': crontab(hour=0, minute=0),  # Every day at midnight
+#     },
+# }
+
+# CELERY_BEAT_SCHEDULE = {
+#     'send-yearly-reminders': {
+#         'task': 'diary.tasks.send_yearly_reminders',
+#         'schedule': crontab(hour=0, minute=0),  # Every day at midnight
+#     },
+# }
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Set access token lifetime
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Set refresh token lifetime
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
 }
 
-CELERY_BEAT_SCHEDULE = {
-    'send-yearly-reminders': {
-        'task': 'diary.tasks.send_yearly_reminders',
-        'schedule': crontab(hour=0, minute=0),  # Every day at midnight
-    },
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
 }
+
+# To enable caching for sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 
 # Database

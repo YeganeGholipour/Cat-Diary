@@ -157,10 +157,23 @@ CACHES = {
     }
 }
 
+
+
 # To enable caching for sessions
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+# Celery settings
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+EMAIL_HOST = "smtp.gmail.com"  
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = "BookClubSystemEmail@gmail.com"  
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = "BookClubSystemEmail@gmail.com" 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

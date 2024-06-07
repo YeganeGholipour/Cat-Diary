@@ -1,6 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import CatDiary
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,9 +23,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 
-
-from rest_framework import serializers
-from .models import CatDiary
 
 class CatSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(required=False)
